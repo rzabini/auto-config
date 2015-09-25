@@ -1,0 +1,33 @@
+group 'com.github.rzabini'
+
+apply plugin: 'groovy'
+apply plugin:'maven-publish'
+
+
+
+sourceCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.10'
+}
+
+jar{
+    manifest {
+        attributes (['Implementation-Version': version,
+                     'Scm-Version' : "${grgit.head().abbreviatedId}${grgit.status().clean?'':'-uncommitted'}"])
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+}
+

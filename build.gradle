@@ -1,0 +1,27 @@
+apply plugin: 'de.gliderpilot.semantic-release'
+
+buildscript{
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'gradle.plugin.de.gliderpilot.gradle.semantic-release:gradle-semantic-release-plugin:1.1.1', {
+            exclude module: 'grgit'
+        }
+        classpath 'org.ajoberstar:grgit:1.4.0', 'com.jcabi:jcabi-github:0.23'
+  }
+}
+
+import com.github.zafarkhaja.semver.Version
+
+task show << {
+    def service= semanticRelease.changeLogService
+
+
+    def previousVersion= Version.valueOf(project.version.inferredVersion.previousVersion)
+    def commitList= service.commits(previousVersion)
+
+    println service.changeLog(commitList, project.version.inferredVersion).toString()
+
+}
