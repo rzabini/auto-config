@@ -2,7 +2,7 @@ package com.github.rzabini.config
 
 trait AutoConfig {
 
-    String name
+    String group
     String env
     def config
     File baseDir = new File(System.getProperty("user.dir"))
@@ -23,14 +23,14 @@ trait AutoConfig {
         if(!configDir)
             configDir = findConfigDir(baseDir)
         assert configDir != null, "cannot find config dir"
-        def configFile = new File(configDir, "${name}.groovy")
+        def configFile = new File(configDir, "${group}.groovy")
         assert configFile.exists(), "cannot find $configFile"
         new ConfigSlurper(env).parse(
                 configFile.toURI().toURL())
     }
 
-    void setName(String name){
-        this.name=name
+    void setGroup(String group){
+        this.group=group
         this.config=readBaseConfig()
     }
 
