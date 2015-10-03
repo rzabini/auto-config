@@ -1,6 +1,5 @@
 package test.com.github.rzabini.config
 
-import com.github.rzabini.config.AutoConfig
 import spock.lang.Specification
 
 class AutoConfigSpecification extends Specification {
@@ -40,7 +39,7 @@ class AutoConfigSpecification extends Specification {
 
     def "can read configuration with non standard name"(){
         given:
-        TestAutoConfig testAutoConfig=new TestAutoConfig(name: 'second')
+        TestAutoConfig testAutoConfig=new TestAutoConfig(group: 'second')
 
         expect:
         testAutoConfig.ssh.host== 'second'
