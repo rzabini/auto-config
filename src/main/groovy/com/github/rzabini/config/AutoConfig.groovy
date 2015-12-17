@@ -62,14 +62,18 @@ trait AutoConfig {
         this.env = env
     }
 
-    ConfigObject getConfig() {
+    ConfigObject readConfig() {
         if (!config) {
             readBaseConfig()
         }
         config
     }
 
+    ConfigObject getConfig() {
+        readConfig()
+    }
+
     Object propertyMissing(String property) {
-        return getConfig().get(property)
+        return readConfig().get(property)
     }
 }
