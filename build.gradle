@@ -1,27 +1,55 @@
 apply plugin: 'de.gliderpilot.semantic-release'
 
-buildscript{
+apply from: 'gradle/compile.gradle'
+apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/code-quality.gradle'
+apply from: 'gradle/code-coverage.gradle'
 
-    repositories {
-        jcenter()
+buildscript {
+	repositories {
+		jcenter()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "de.gliderpilot.gradle.semantic-release:gradle-semantic-release-plugin:1.1.2"		
+		classpath "ru.vyarus:gradle-quality-plugin:1.0.2"
     }
-    dependencies {
-        classpath 'gradle.plugin.de.gliderpilot.gradle.semantic-release:gradle-semantic-release-plugin:1.1.1', {
-            exclude module: 'grgit'
-        }
-        classpath 'org.ajoberstar:grgit:1.4.0', 'com.jcabi:jcabi-github:0.23'
-  }
 }
 
-import com.github.zafarkhaja.semver.Version
+group 'com.github.rzabini'
 
-task show << {
-    def service= semanticRelease.changeLogService
-
-
-    def previousVersion= Version.valueOf(project.version.inferredVersion.previousVersion)
-    def commitList= service.commits(previousVersion)
-
-    println service.changeLog(commitList, project.version.inferredVersion).toString()
-
+release {
+    versionStrategy org.ajoberstar.gradle.git.release.semver.RebuildVersionStrategy.INSTANCE
 }
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.3.10'
+	testCompile 'org.spockframework:spock-core:1.0-groovy-2.3',
+            {exclude module: "groovy-all"}
+	testCompile 'com.google.jimfs:jimfs:1.0'
+}
+
+task integTest {
+    dependsOn test
+}
+
+tasks.release {
+    dependsOn build
+}
+
+test {
+    if (gradle.startParameter.taskNames.find { ['integTest', 'release'].contains(it) })
+        systemProperty 'integTest', 'true'
+    maxHeapSize = '512m'
+    jvmArgs '-XX:MaxPermSize=256m'
+
+	workingDir = 'build/resources/test/root/subdir'
+}
+
+

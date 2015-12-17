@@ -1,0 +1,16 @@
+apply plugin: 'jdepend'
+apply plugin: "ru.vyarus.quality"
+
+
+jdepend {
+    toolVersion = '2.9.1'
+    sourceSets = [sourceSets.main]
+    ignoreFailures = true
+    reportsDir = file("$project.buildDir/reports/jdepend")
+}
+
+afterEvaluate {
+	codenarc {
+		ignoreFailures = true
+	}
+}
