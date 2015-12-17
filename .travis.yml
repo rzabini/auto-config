@@ -12,7 +12,7 @@ branches:
 before_install:
   - chmod +x gradlew
   - git fetch
-  - git config user.email "rzabini@@users.noreply.github.com"
+  - git config user.email "rzabini@users.noreply.github.com"
   - git config user.name "Travis-CI"
   - git config url.https://.insteadOf git://
   - git checkout -qf $TRAVIS_BRANCH
