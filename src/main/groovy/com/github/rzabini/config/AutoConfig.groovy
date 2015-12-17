@@ -3,7 +3,8 @@ package com.github.rzabini.config
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.logging.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * implementing classes will be able to auto load their configuration according to a predefined concevtion
@@ -20,7 +21,7 @@ trait AutoConfig {
     Path workingDir
     Path configDir
     private static final String DEFAULT_CONFIG_NAME = 'config'
-    final static Logger LOG = Logger.getLogger(this.class.name)
+    private static final Logger LOG = LoggerFactory.getLogger(this.class.name)
 
     Path getWorkingDir() {
         workingDir ?: Paths.get(System.getProperty('user.dir'))
@@ -42,7 +43,6 @@ trait AutoConfig {
         }
 
         findConfigDir(baseDir.parent)
-
     }
 
     void readBaseConfig() {
