@@ -20,7 +20,7 @@ trait AutoConfig {
     Path workingDir
     Path configDir
     private static final String DEFAULT_CONFIG_NAME = 'config'
-    //final static Logger LOG = Logger.getLogger(AutoConfig)
+    final static Logger LOG = Logger.getLogger(this.class.name)
 
     Path getWorkingDir() {
         workingDir ?: Paths.get(System.getProperty('user.dir'))
@@ -31,7 +31,7 @@ trait AutoConfig {
     }
 
     Path findConfigDir(Path baseDir) {
-        //LOG.info "searching in $baseDir"
+        LOG.info "searching in $baseDir"
         if (!baseDir) {
             return null
         }
@@ -48,7 +48,7 @@ trait AutoConfig {
     void readBaseConfig() {
         configDir = configDir ?: this.findConfigDir(workingDir)
         assert configDir != null, 'cannot find config dir'
-        //LOG.info "found config dir: $configDir"
+        LOG.info "found config dir: $configDir"
         Path configFile = configDir.resolve("${group}.groovy")
         assert Files.exists(configFile), "cannot find $configFile"
         this.config = new ConfigSlurper(env).parse(configFile.text)
